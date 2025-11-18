@@ -125,43 +125,16 @@ class ProductServiceImplTest {
                 "name of the product",exception.getMessage());
     }
 
-
     @Test
     void deleteProduct() {
-       when(repo.save(any(Product.class))).thenReturn(p);
-
-       when(repo.findById(1L)).thenReturn(Optional.ofNullable(p));
-//                       .thenReturn(Optional.empty());
-
-        when(repo.existsById(1L)).thenReturn(true);
-//                .thenReturn(false);
-
-        System.out.println(repo.existsById(1L));
-
-       //do nothing
-        doNothing().when(repo).deleteById(1L);
-        System.out.println(repo.existsById(1L));
-        //call the delete method
-//       service.deleteProduct(1L);
-       repo.deleteById(1L);
-
-       when(repo.findById(1L)).thenReturn(Optional.empty());
-        when(repo.existsById(1L)) .thenReturn(false);
-
-
-        RuntimeException exception = assertThrows(RuntimeException.class,() ->
-                service.findProductbyId(1L));
-        assertEquals("The provided product Id doesnt appear on our database",exception.getMessage());
-    }
-
-    @Test
-    void deleteProductt() {
+       //Mock the repo and tell it what to do when called and the second part is for after the deletion process
        when(repo.existsById(1L)).thenReturn(true)
                .thenReturn(false);
 
+       //The delete method is void so it returns nothing but deletes the entity
        doNothing().when(repo).deleteById(1L);
        service.deleteProduct(1L);
-
+       //The entity is deleted so we need to get an exception because the entity is no more
         RuntimeException exception = assertThrows(RuntimeException.class,() ->
                 service.deleteProduct(1L));
         assertEquals("The provided product Id doesnt appear on our database",exception.getMessage());
