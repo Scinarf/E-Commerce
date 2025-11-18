@@ -43,9 +43,8 @@ public class ProductServiceImpl implements ProductService {
         Product exists = repo.findById(id).orElseThrow(() -> new InvalidProductIdException("The provided product Id " +
                 "doesnt appear on our database"));
         if(exists.getProductName().equals(p.getProductName())){
-            Product up = repo.findById(id).get();
-            up.setPrice(p.getPrice());
-            return repo.save(up);
+            exists.setPrice(p.getPrice());
+            return repo.save(exists);
 
         } else {
             throw new NewProductNameException("You are not allowed to change the " +
